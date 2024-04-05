@@ -30,7 +30,7 @@ void AMainCharacter::Init()
 
 	MainCamera = GetComponentByClass<UCameraComponent>();
 	MainMesh = GetMesh();
-	MainAnimation = Cast<UMainAnimInstance>(GetMesh()->GetAnimInstance());
+	Mediator = GetComponentByClass<UMainCharacterMediator>();
 	
 	bUseControllerRotationYaw = false;
 
@@ -50,9 +50,13 @@ void AMainCharacter::InitPlayerController()
 
 void AMainCharacter::BindEvent()
 {
-	if(MainAnimation != nullptr)
+	if(Mediator != nullptr)
 	{
-		MainAnimation->SendCanMove.AddUObject(this, &AMainCharacter::SetCanMove);
+		TFunctionFrame<bool>* Frame = NewObject<TFunctionFrame<bool>>();
+
+		Frame->MainEvent.AddUObject(this, );
+		
+		Mediator->AttachEvent(Frame);
 	}
 }
 

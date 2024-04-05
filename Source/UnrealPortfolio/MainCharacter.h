@@ -11,7 +11,11 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 
+#include "MainCharacterMediator.h"
+
 #include "MainCharacter.generated.h"
+
+class UMainAnimInstance;
 
 UCLASS()
 class UNREALPORTFOLIO_API AMainCharacter : public ACharacter
@@ -55,9 +59,10 @@ public:
 
 	UPROPERTY()
 	USkeletalMeshComponent* MainMesh;
-	UPROPERTY()
-	UMainAnimInstance* MainAnimation;
 
+	UPROPERTY()
+	UMainCharacterMediator* Mediator;
+	
 	UPROPERTY()
 	bool bCanMove = true;
 	
