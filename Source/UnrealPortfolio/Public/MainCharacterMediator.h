@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "vector"
 
 #include "MainCharacterMediator.generated.h"
 
@@ -28,23 +27,29 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 protected:
-	TArray<TFunctionFrame<bool>*> AttackFrames;
+	TArray<TSharedRef<TFunctionFrame<bool>>> AttackFrames;
 public:
-	void AttachEvent(TFunctionFrame<bool>* Event);
-	void PlayEvent(const TFunctionFrame<bool>* Event, const bool Data);
-	
+	void AttachEvent(TSharedPtr<TFunctionFrame<bool>> Event);
+	void SendEvent(TSharedPtr<TFunctionFrame<bool>> Address, bool bData);
 };
 
 template<typename T>
 class TFunctionFrame
 {
 public:
+	DECLARE_EVENT_TwoParams(TFunctionFrame, FSendEvent, TSharedPtr<TFunctionFrame<T>>, T);
+	FSendEvent SendEvent;
 
-	DECLARE_EVENT_OneParam(TFunctionFrame, FEvent, T);
-	FEvent MainEvent;
+	DECLARE_EVENT_OneParam(TFuncionFrame, FReceiveEvent, T);
+	FReceiveEvent ReceiveEvent;
 
-	void PlayEvent(T Parameter)
+	void PlaySendEvent(TSharedPtr<TFunctionFrame<bool>> Address, T Data)
 	{
-		MainEvent.Broadcast(Parameter);
+		SendEvent.Broadcast(Address, Data);
+	}
+
+	void PlayReceiveEvent(T Data)
+	{
+		ReceiveEvent.Broadcast(Data);
 	}
 };

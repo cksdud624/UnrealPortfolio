@@ -52,9 +52,11 @@ void AMainCharacter::BindEvent()
 {
 	if(Mediator != nullptr)
 	{
-		TFunctionFrame<bool>* Frame = NewObject<TFunctionFrame<bool>>();
+		TSharedPtr<TFunctionFrame<bool>> Frame = MakeShared<TFunctionFrame<bool>>();
 
-		Frame->MainEvent.AddUObject(this, );
+		Frame->ReceiveEvent.AddUObject(this, &AMainCharacter::SetCanMove);
+		
+		AttackEvent = Frame;
 		
 		Mediator->AttachEvent(Frame);
 	}
@@ -119,7 +121,11 @@ void AMainCharacter::JumpPlayer(const FInputActionValue& Value)
 
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {
-	AttackEvent.Broadcast();
+	if(AttackEvent != nullptr && bCanMove)
+	{
+		bCanMove = false;
+		AttackEvent->PlaySendEvent(AttackEvent, true);
+	}
 }
 
 
@@ -138,7 +144,7 @@ void AMainCharacter::RotateMesh(const int Forward, const int Right)
 	}
 }
 
-void AMainCharacter::SetCanMove(const bool bCanMove)
+void AMainCharacter::SetCanMove(bool bCanMove)
 {
 	this->bCanMove = bCanMove;
 }

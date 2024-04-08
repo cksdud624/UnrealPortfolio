@@ -5,7 +5,9 @@
 #include "Animation/AnimInstance.h"
 #include "UnrealPortfolio/Public/MainAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MainCharacterMediator.h"
 #include "UnrealPortfolio/MainCharacter.h"
+
 
 #include "MainAnimInstance.generated.h"
 
@@ -30,10 +32,10 @@ public:
 	bool bFalling;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool bAttacking;
+	bool bAttacking = false;
 
-	DECLARE_EVENT_OneParam(UMainAnimInstance, FCanMove, bool);
-	FCanMove SendCanMove;
+	UFUNCTION(BlueprintCallable, Category = "MyFunctions")
+	void CallAttackIsOver();
 	
 protected:
 	
@@ -42,12 +44,16 @@ protected:
 	UPROPERTY()
 	UCharacterMovementComponent* MainCharacterMovement;
 	UPROPERTY()
+	UMainCharacterMediator* Mediator;
+	UPROPERTY()
 	bool bCanMove;
+
+	TSharedPtr<TFunctionFrame<bool>> AttackEvent;
 	
 	void Init();
 	void BindEvent();
 	
 	void SyncAnimationData();
 	
-	void Attack();
+	void Attack(bool bAttack);
 };

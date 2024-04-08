@@ -54,6 +54,13 @@ public:
 	class UInputAction* MouseLeftAction;
 
 	//------------------------------------------------------
+	
+	UPROPERTY()
+	bool bCanMove = true;
+
+
+
+protected:
 	UPROPERTY()
 	UCameraComponent* MainCamera;
 
@@ -63,15 +70,8 @@ public:
 	UPROPERTY()
 	UMainCharacterMediator* Mediator;
 	
-	UPROPERTY()
-	bool bCanMove = true;
+	TSharedPtr<TFunctionFrame<bool>> AttackEvent;
 	
-	DECLARE_EVENT(AMainCharacter, FAttackEvent);
-	FAttackEvent AttackEvent;
-
-
-protected:
-
 	void Init();
 	void InitPlayerController();
 	void BindEvent();
@@ -83,5 +83,5 @@ protected:
 	
 	void RotateMesh(const int Forward, const int Right);
 	
-	void SetCanMove(const bool bCanMove);
+	void SetCanMove(bool bCanMove);
 };

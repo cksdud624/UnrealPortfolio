@@ -31,27 +31,29 @@ void UMainCharacterMediator::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-void UMainCharacterMediator::AttachEvent(TFunctionFrame<bool>* Event)
+void UMainCharacterMediator::AttachEvent(TSharedPtr<TFunctionFrame<bool>> Event)
 {
+	TSharedRef<TFunctionFrame<bool>> Ref = Event.ToSharedRef();
+	
 	for(int i = 0; i < AttackFrames.Num(); i++)
 	{
-		if(AttackFrames[i] == Event)
+		if(AttackFrames[i] == Ref)
 			return;
 	}
 
-	AttackFrames.Add(Event);
+	Ref->SendEvent.AddUObject(this, &UMainCharacterMediator::SendEvent);
+
+	AttackFrames.Add(Ref);
 }
 
-
-void UMainCharacterMediator::PlayEvent(const TFunctionFrame<bool>* Event, const bool Data)
+void UMainCharacterMediator::SendEvent(TSharedPtr<TFunctionFrame<bool>> Address, bool bData)
 {
 	for(int i = 0; i < AttackFrames.Num(); i++)
 	{
-		if(AttackFrames[i] != Event)
+		if(AttackFrames[i] != Address)
 		{
-			AttackFrames[i]->PlayEvent(Data);
+			AttackFrames[i]->PlayReceiveEvent(bData);
 		}
 	}
 }
-
 

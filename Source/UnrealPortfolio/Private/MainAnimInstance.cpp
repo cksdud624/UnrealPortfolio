@@ -15,9 +15,21 @@ void UMainAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	SyncAnimationData();
 }
 
+
+void UMainAnimInstance::CallAttackIsOver()
+{
+	bAttacking = false;
+	if(AttackEvent != nullptr)
+	{
+		AttackEvent->PlaySendEvent(AttackEvent, true);
+	}
+}
+
 void UMainAnimInstance::Init()
 {
 	APawn* Owner = TryGetPawnOwner();
+
+	Mediator = Owner->GetComponentByClass<UMainCharacterMediator>();
 
 	if(Owner != nullptr)
 	{
@@ -34,9 +46,11 @@ void UMainAnimInstance::Init()
 
 void UMainAnimInstance::BindEvent()
 {
-	if(MainCharacter != nullptr)
+	if(Mediator != nullptr)
 	{
-		MainCharacter->AttackEvent.AddUObject(this, &UMainAnimInstance::Attack);
+		TSharedPtr<TFunctionFrame<bool>> Frame = MakeShared<TFunctionFrame<bool>>();
+
+		Frame->ReceiveEvent.AddUObject(this, &UMainAnimInstance::Attack);
 	}
 }
 
@@ -50,11 +64,11 @@ void UMainAnimInstance::SyncAnimationData()
 	}
 }
 
-void UMainAnimInstance::Attack()
+void UMainAnimInstance::Attack(bool bAttack)
 {
-	bAttacking = true;
+	if(!bAttacking)
+		bAttacking = bAttack;
 }
-
 
 
 
