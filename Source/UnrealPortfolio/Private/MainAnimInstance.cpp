@@ -2,6 +2,8 @@
 
 #include "UnrealPortfolio/Public/MainAnimInstance.h"
 
+#include "Engine/SkeletalMeshSocket.h"
+
 
 void UMainAnimInstance::NativeInitializeAnimation()
 {
@@ -23,24 +25,27 @@ void UMainAnimInstance::CallAttackIsOver()
 	{
 		AttackEvent->PlaySendEvent(AttackEvent, true);
 	}
+
+	UE_LOG(LogTemp, Log, TEXT("어택 종료"));
 }
 
 void UMainAnimInstance::Init()
 {
 	APawn* Owner = TryGetPawnOwner();
 
-	Mediator = Owner->GetComponentByClass<UMainCharacterMediator>();
-
 	if(Owner != nullptr)
 	{
+		Mediator = Owner->GetComponentByClass<UMainCharacterMediator>();
+		
 		MainCharacter = Cast<AMainCharacter>(Owner);
 
 		if(MainCharacter != nullptr)
 		{
 			MainCharacterMovement = MainCharacter->GetCharacterMovement();
 		}
-	}
 
+		MainMesh = GetSkelMeshComponent();
+	}
 	BindEvent();
 }
 
@@ -51,6 +56,10 @@ void UMainAnimInstance::BindEvent()
 		TSharedPtr<TFunctionFrame<bool>> Frame = MakeShared<TFunctionFrame<bool>>();
 
 		Frame->ReceiveEvent.AddUObject(this, &UMainAnimInstance::Attack);
+
+		AttackEvent = Frame;
+		
+		Mediator->AttachEvent(Frame);
 	}
 }
 

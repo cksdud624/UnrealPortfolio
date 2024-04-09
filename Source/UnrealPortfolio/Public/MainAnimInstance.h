@@ -3,17 +3,11 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "UnrealPortfolio/Public/MainAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MainCharacterMediator.h"
 #include "UnrealPortfolio/MainCharacter.h"
 
-
 #include "MainAnimInstance.generated.h"
-
-/**
- * 
- */
 
 
 UCLASS()
@@ -46,7 +40,7 @@ protected:
 	UPROPERTY()
 	UMainCharacterMediator* Mediator;
 	UPROPERTY()
-	bool bCanMove;
+	USkeletalMeshComponent* MainMesh;
 
 	TSharedPtr<TFunctionFrame<bool>> AttackEvent;
 	

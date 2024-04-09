@@ -83,5 +83,5 @@ protected:
 	
 	void RotateMesh(const int Forward, const int Right);
 	
-	void SetCanMove(bool bCanMove);
+	void SetCanMove(bool bMove);
 };

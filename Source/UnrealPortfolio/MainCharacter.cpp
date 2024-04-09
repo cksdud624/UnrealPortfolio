@@ -144,9 +144,9 @@ void AMainCharacter::RotateMesh(const int Forward, const int Right)
 	}
 }
 
-void AMainCharacter::SetCanMove(bool bCanMove)
+void AMainCharacter::SetCanMove(bool bMove)
 {
-	this->bCanMove = bCanMove;
+	bCanMove = bMove;
 }
 
 	
