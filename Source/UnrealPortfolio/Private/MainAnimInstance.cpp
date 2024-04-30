@@ -21,6 +21,12 @@ void UMainAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UMainAnimInstance::CallAttackIsOver()
 {
 	bAttacking = false;
+	if(Weapon != nullptr)
+	{
+		Weapon->SetActorHiddenInGame(true);
+		Weapon->SetActorEnableCollision(false);
+	}
+	
 	if(AttackEvent != nullptr)
 	{
 		AttackEvent->PlaySendEvent(AttackEvent, true);
@@ -37,7 +43,7 @@ void UMainAnimInstance::Init()
 	{
 		Mediator = Owner->GetComponentByClass<UMainCharacterMediator>();
 		
-		MainCharacter = Cast<AMainCharacter>(Owner);
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(Owner);
 
 		if(MainCharacter != nullptr)
 		{
@@ -45,6 +51,24 @@ void UMainAnimInstance::Init()
 		}
 
 		MainMesh = GetSkelMeshComponent();
+
+
+		TArray<AActor*> ChildActors;
+		Owner->GetAllChildActors(ChildActors);
+
+		for(AActor* ChildActor : ChildActors)
+		{
+			if(ACharacterWeaponSword* CheckActor = Cast<ACharacterWeaponSword>(ChildActor))
+			{
+				Weapon = CheckActor;
+			}
+		}
+
+		if(Weapon != nullptr)
+		{
+			Weapon->SetActorHiddenInGame(true);
+			Weapon->SetActorEnableCollision(false);
+		}
 	}
 	BindEvent();
 }
@@ -76,7 +100,14 @@ void UMainAnimInstance::SyncAnimationData()
 void UMainAnimInstance::Attack(bool bAttack)
 {
 	if(!bAttacking)
+	{
 		bAttacking = bAttack;
+		if(Weapon != nullptr)
+		{
+			Weapon->SetActorHiddenInGame(false);
+			Weapon->SetActorEnableCollision(true);
+		}
+	}
 }
 
 

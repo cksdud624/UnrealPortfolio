@@ -3,25 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "CharacterWeaponSword.generated.h"
+#include "GameFramework/Pawn.h"
+#include "EnemyField.generated.h"
 
 UCLASS()
-class UNREALPORTFOLIO_API ACharacterWeaponSword : public AActor
+class UNREALPORTFOLIO_API AEnemyField : public APawn
 {
 	GENERATED_BODY()
-	
+
 public:
-	// Sets default values for this actor's properties
-	ACharacterWeaponSword();
+	// Sets default values for this pawn's properties
+	AEnemyField();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

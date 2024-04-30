@@ -2,10 +2,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterWeaponSword.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MainCharacterMediator.h"
 #include "UnrealPortfolio/MainCharacter.h"
+
 
 #include "MainAnimInstance.generated.h"
 
@@ -32,15 +34,14 @@ public:
 	void CallAttackIsOver();
 	
 protected:
-	
-	UPROPERTY()
-	AMainCharacter* MainCharacter;
 	UPROPERTY()
 	UCharacterMovementComponent* MainCharacterMovement;
 	UPROPERTY()
 	UMainCharacterMediator* Mediator;
 	UPROPERTY()
 	USkeletalMeshComponent* MainMesh;
+	UPROPERTY()
+	ACharacterWeaponSword* Weapon;
 
 	TSharedPtr<TFunctionFrame<bool>> AttackEvent;
 	

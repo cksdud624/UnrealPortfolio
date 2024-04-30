@@ -4,21 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharacterWeaponSword.generated.h"
+#include "Enemy.generated.h"
 
 UCLASS()
-class UNREALPORTFOLIO_API ACharacterWeaponSword : public AActor
+class UNREALPORTFOLIO_API AEnemy : public AActor
 {
 	GENERATED_BODY()
 	
-public:
+public:	
 	// Sets default values for this actor's properties
-	ACharacterWeaponSword();
+	AEnemy();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 public:	
 	// Called every frame
